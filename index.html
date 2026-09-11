@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Indian Rivers 3D 🇮🇳</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  background:#020912;
+  color:#fff;
+  font-family:Arial,sans-serif;
+}
+
+.app{
+  max-width:500px;
+  min-height:100vh;
+  margin:auto;
+  background:linear-gradient(#031a2d,#020912);
+  overflow:hidden;
+}
+
+.flag{
+  height:6px;
+  background:linear-gradient(
+    #ff9933 0 33%,
+    white 33% 66%,
+    #138808 66%
+  );
+}
+
+header{
+  padding:18px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.logo{
+  font-size:23px;
+  font-weight:bold;
+}
+
+.logo small{
+  display:block;
+  color:#65d9ff;
+  font-size:11px;
+  margin-top:4px;
+}
+
+.bell{
+  background:#09283e;
+  border:1px solid #1b5675;
+  color:white;
+  border-radius:50%;
+  width:42px;
+  height:42px;
+  font-size:20px;
+}
+
+.hero{
+  padding:5px 18px 15px;
+}
+
+.hero h1{
+  font-size:30px;
+}
+
+.hero p{
+  color:#8da7b7;
+  margin-top:7px;
+}
+
+/* 3D MAP */
+
+.map{
+  height:390px;
+  margin:10px 14px;
+  border-radius:25px;
+  position:relative;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 50% 45%,#07547b,#021522 68%);
+  border:1px solid #176087;
+  box-shadow:0 0 35px #003c5c;
+}
+
+.map-title{
+  position:absolute;
+  top:13px;
+  left:13px;
+  z-index:10;
+  background:#031521cc;
+  border:1px solid #28627e;
+  border-radius:12px;
+  padding:8px 11px;
+  font-size:11px;
+}
+
+/* 3D INDIA */
+
+.india{
+  position:absolute;
+  width:230px;
+  height:285px;
+  left:50%;
+  top:55%;
+  transform:
+    translate(-50%,-50%)
+    perspective(500px)
+    rotateX(48deg)
+    rotateZ(-4deg);
+  background:
+    linear-gradient(145deg,#248d54,#07552f);
+  clip-path:polygon(
+    27% 0%,48% 3%,70% 13%,84% 28%,
+    78% 43%,73% 55%,66% 67%,
+    58% 79%,50% 100%,41% 85%,
+    33% 72%,22% 59%,13% 45%,
+    16% 29%,10% 18%
+  );
+  box-shadow:
+    15px 20px 0 #02351f,
+    0 0 25px #00ff9d66;
+}
+
+/* RIVERS */
+
+.river{
+  position:absolute;
+  height:4px;
+  border-radius:50%;
+  background:#00d9ff;
+  box-shadow:
+    0 0 5px #00eaff,
+    0 0 14px #008cff;
+  animation:flow 1.5s linear infinite;
+  z-index:5;
+}
+
+.r1{
+  width:145px;
+  left:91px;
+  top:145px;
+  transform:rotate(18deg);
+}
+
+.r2{
+  width:105px;
+  left:100px;
+  top:172px;
+  transform:rotate(48deg);
+}
+
+.r3{
+  width:120px;
+  left:105px;
+  top:205px;
+  transform:rotate(28deg);
+}
+
+.r4{
+  width:100px;
+  left:105px;
+  top:235px;
+  transform:rotate(65deg);
+}
+
+@keyframes flow{
+  0%{opacity:.4;filter:brightness(1)}
+  50%{opacity:1;filter:brightness(2)}
+  100%{opacity:.4;filter:brightness(1)}
+}
+
+.label{
+  position:absolute;
+  z-index:15;
+  background:#021b2bcc;
+  border:1px solid #36bce9;
+  padding:5px 8px;
+  border-radius:9px;
+  font-size:10px;
+}
+
+.ganga{top:130px;left:240px}
+.yamuna{top:168px;left:65px}
+.brahma{top:105px;left:105px}
+.narmada{top:205px;left:65px}
+.godavari{top:240px;left:215px}
+.krishna{top:270px;left:105px}
+
+/* CONTROLS */
+
+.controls{
+  position:absolute;
+  right:12px;
+  bottom:15px;
+  z-index:20;
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+
+.controls button{
+  width:40px;
+  height:40px;
+  border-radius:12px;
+  border:1px solid #27708f;
+  background:#021827dd;
+  color:#fff;
+  font-size:20px;
+}
+
+/* SEARCH */
+
+.search{
+  margin:15px;
+  padding:15px;
+  border-radius:16px;
+  background:#061d30;
+  border:1px solid #1a4f6d;
+}
+
+.search input{
+  width:100%;
+  background:none;
+  border:0;
+  outline:0;
+  color:white;
+  font-size:16px;
+}
+
+.search input::placeholder{
+  color:#718b9c;
+}
+
+/* TITLE */
+
+.title{
+  padding:5px 16px 12px;
+  display:flex;
+  justify-content:space-between;
+}
+
+.title h2{font-size:19px}
+.title span{color:#55caff;font-size:12px}
+
+/* CARDS */
+
+.cards{
+  display:flex;
+  gap:12px;
+  overflow-x:auto;
+  padding:0 16px 15px;
+}
+
+.cards::-webkit-scrollbar{display:none}
+
+.card{
+  min-width:160px;
+  height:135px;
+  border-radius:17px;
+  padding:15px;
+  background:linear-gradient(145deg,#0a3c58,#041521);
+  border:1px solid #205875;
+  position:relative;
+  cursor:pointer;
+}
+
+.card .wave{
+  font-size:28px;
+}
+
+.card h3{
+  margin-top:18px;
+}
+
+.card p{
+  color:#7691a2;
+  font-size:11px;
+  margin-top:4px;
+}
+
+.km{
+  position:absolute;
+  right:10px;
+  top:10px;
+  color:#61d9ff;
+  font-size:10px;
+}
+
+/* LIST */
+
+.list{
+  padding:0 15px 90px;
+}
+
+.item{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:13px;
+  margin-bottom:9px;
+  background:#061d30;
+  border:1px solid #164a65;
+  border-radius:15px;
+  cursor:pointer;
+}
+
+.icon{
+  width:48px;
+  height:48px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  border-radius:13px;
+  background:#0b4562;
+  font-size:24px;
+}
+
+.item-info{flex:1}
+
+.item-info h3{font-size:16px}
+
+.item-info p{
+  color:#7892a2;
+  font-size:11px;
+  margin-top:4px;
+}
+
+.arrow{
+  color:#58d5ff;
+  font-size:24px;
+}
+
+/* BOTTOM */
+
+nav{
+  position:fixed;
+  bottom:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:100%;
+  max-width:500px;
+  height:67px;
+  background:#02111eee;
+  backdrop-filter:blur(12px);
+  border-top:1px solid #174258;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  z-index:100;
+}
+
+nav div{
+  text-align:center;
+  color:#718b9b;
+  font-size:10px;
+}
+
+nav b{
+  display:block;
+  font-size:21px;
+  margin-bottom:4px;
+}
+
+nav .active{color:#ffad27}
+
+/* DETAIL */
+
+.detail{
+  position:fixed;
+  inset:0;
+  background:#020912;
+  z-index:200;
+  display:none;
+  overflow:auto;
+}
+
+.detail-head{
+  height:280px;
+  position:relative;
+  background:
+    radial-gradient(circle,#08749a,#02121f);
+  overflow:hidden;
+}
+
+.water{
+  position:absolute;
+  width:200%;
+  height:100%;
+  left:-50%;
+  top:45%;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent 0 12px,
+      #00d9ff33 13px 15px
+    );
+  transform:rotate(-8deg);
+  animation:wave 3s linear infinite;
+}
+
+@keyframes wave{
+  from{transform:translateX(0) rotate(-8deg)}
+  to{transform:translateX(80px) rotate(-8deg)}
+}
+
+.back,.heart{
+  position:absolute;
+  top:17px;
+  width:43px;
+  height:43px;
+  border-radius:50%;
+  border:1px solid #52809a;
+  background:#021827cc;
+  color:white;
+  font-size:20px;
+  z-index:5;
+}
+
+.back{left:15px}
+.heart{right:15px}
+
+.detail-name{
+  position:absolute;
+  bottom:20px;
+  left:20px;
+  z-index:5;
+}
+
+.detail-name h1{font-size:36px}
+
+.detail-name p{
+  color:#69d9ff;
+  margin-top:5px;
+}
+
+.detail-body{
+  padding:20px;
+  padding-bottom:100px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.info{
+  background:#061d30;
+  border:1px solid #174b67;
+  border-radius:15px;
+  padding:15px;
+}
+
+.info small{
+  display:block;
+  color:#718c9d;
+  margin-bottom:8px;
+}
+
+.info strong{
+  font-size:13px;
+}
+
+.about{
+  margin-top:15px;
+  background:#062239;
+  border:1px solid #195675;
+  padding:17px;
+  border-radius:16px;
+  color:#aec7d3;
+  line-height:21px;
+  font-size:13px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<div class="flag"></div>
+
+<header>
+  <div class="logo">
+    🌊 Indian Rivers
+    <small>भारत की जीवनधारा 🇮🇳</small>
+  </div>
+  <button class="bell">🔔</button>
+</header>
+
+<section class="hero">
+  <h1>Explore India's<br>Great Rivers</h1>
+  <p>Discover India's rivers in 3D</p>
+</section>
+
+
+<!-- 3D MAP -->
+
+<div class="map">
+
+  <div class="map-title">🗺️ 3D INDIA RIVER MAP</div>
+
+  <div class="india">
+
+    <div class="river r1"></div>
+    <div class="river r2"></div>
+    <div class="river r3"></div>
+    <div class="river r4"></div>
+
+  </div>
+
+  <div class="label ganga">Ganga</div>
+  <div class="label yamuna">Yamuna</div>
+  <div class="label brahma">Brahmaputra</div>
+  <div class="label narmada">Narmada</div>
+  <div class="label godavari">Godavari</div>
+  <div class="label krishna">Krishna</div>
+
+  <div class="controls">
+    <button onclick="zoom(1)">+</button>
+    <button onclick="resetMap()">⟳</button>
+    <button onclick="zoom(-1)">−</button>
+  </div>
+
+</div>
+
+
+<!-- SEARCH -->
+
+<div class="search">
+  🔎
+  <input
+    id="search"
+    placeholder="Search river..."
+    oninput="searchRiver()"
+  >
+</div>
+
+
+<div class="title">
+  <h2>Popular Rivers</h2>
+  <span>INDIA 🇮🇳</span>
+</div>
+
+<div class="cards" id="cards"></div>
+
+
+<div class="title">
+  <h2>All Rivers</h2>
+  <span>View All</span>
+</div>
+
+<div class="list" id="list"></div>
+
+</div>
+
+
+<!-- DETAIL -->
+
+<div class="detail" id="detail">
+
+  <div class="detail-head">
+
+    <div class="water"></div>
+
+    <button class="back" onclick="closeDetail()">←</button>
+
+    <button class="heart" onclick="fav(this)">♡</button>
+
+    <div class="detail-name">
+      <h1 id="dName"></h1>
+      <p id="dEnglish"></p>
+    </div>
+
+  </div>
+
+  <div class="detail-body">
+
+    <h2 style="margin-bottom:13px">Quick Facts</h2>
+
+    <div class="grid">
+
+      <div class="info">
+        <small>📏 LENGTH</small>
+        <strong id="dLength"></strong>
+      </div>
+
+      <div class="info">
+        <small>🏔️ SOURCE</small>
+        <strong id="dSource"></strong>
+      </div>
+
+      <div class="info">
+        <small>🗺️ STATES</small>
+        <strong id="dStates"></strong>
+      </div>
+
+      <div class="info">
+        <small>🌊 MOUTH</small>
+        <strong id="dMouth"></strong>
+      </div>
+
+    </div>
+
+    <div class="about">
+      <b>🌊 About this river</b>
+      <p id="dAbout" style="margin-top:9px"></p>
+    </div>
+
+    <div class="about">
+      <b>💧 Major Tributaries</b>
+      <p id="dTrib" style="margin-top:9px"></p>
+    </div>
+
+  </div>
+
+</div>
+
+
+<nav>
+  <div class="active">
+    <b>⌂</b>Home
+  </div>
+
+  <div onclick="mapScroll()">
+    <b>◎</b>Map
+  </div>
+
+  <div onclick="riverScroll()">
+    <b>≋</b>Rivers
+  </div>
+
+  <div>
+    <b>♡</b>Favorites
+  </div>
+
+  <div>
+    <b>•••</b>More
+  </div>
+</nav>
+
+
+<script>
+
+const rivers=[
+
+{
+name:"गंगा",
+eng:"Ganga",
+length:"2,525 km",
+source:"Gangotri Glacier",
+states:"Uttarakhand, UP, Bihar, Jharkhand, West Bengal",
+mouth:"Bay of Bengal",
+trib:"Yamuna, Ghaghara, Gandak, Kosi",
+about:"गंगा भारत की सबसे महत्वपूर्ण नदियों में से एक है। यह हिमालय से निकलकर उत्तर भारत के विशाल मैदानों से होकर बहती है।"
+},
+
+{
+name:"यमुना",
+eng:"Yamuna",
+length:"1,376 km",
+source:"Yamunotri Glacier",
+states:"Uttarakhand, HP, Haryana, Delhi, UP",
+mouth:"Ganga River",
+trib:"Chambal, Sindh, Betwa, Ken",
+about:"यमुना गंगा की प्रमुख सहायक नदी है और उत्तर भारत के कई महत्वपूर्ण क्षेत्रों से होकर बहती है।"
+},
+
+{
+name:"ब्रह्मपुत्र",
+eng:"Brahmaputra",
+length:"2,900 km",
+source:"Tibet Himalayas",
+states:"Arunachal Pradesh, Assam",
+mouth:"Bay of Bengal",
+trib:"Dibang, Lohit, Subansiri",
+about:"ब्रह्मपुत्र हिमालय की एक शक्तिशाली नदी है जो अरुणाचल प्रदेश और असम से होकर बहती है।"
+},
+
+{
+name:"गोदावरी",
+eng:"Godavari",
+length:"1,465 km",
+source:"Trimbakeshwar, Maharashtra",
+states:"Maharashtra, Telangana, Andhra Pradesh",
+mouth:"Bay of Bengal",
+trib:"Pravara, Purna, Manjira, Indravati",
+about:"गोदावरी प्रायद्वीपीय भारत की सबसे लंबी नदियों में से एक है और इसे दक्षिण गंगा भी कहा जाता है।"
+},
+
+{
+name:"नर्मदा",
+eng:"Narmada",
+length:"1,312 km",
+source:"Amarkantak, Madhya Pradesh",
+states:"Madhya Pradesh, Maharashtra, Gujarat",
+mouth:"Arabian Sea",
+trib:"Tawa, Shakkar, Dudhi",
+about:"नर्मदा मध्य भारत की प्रमुख पश्चिमवाहिनी नदी है जो अरब सागर में गिरती है।"
+},
+
+{
+name:"कृष्णा",
+eng:"Krishna",
+length:"1,400 km",
+source:"Mahabaleshwar",
+states:"Maharashtra, Karnataka, Telangana, Andhra Pradesh",
+mouth:"Bay of Bengal",
+trib:"Bhima, Tungabhadra, Ghataprabha",
+about:"कृष्णा दक्षिण भारत की प्रमुख नदियों में से एक है और कृषि के लिए बहुत महत्वपूर्ण है।"
+},
+
+{
+name:"कावेरी",
+eng:"Kaveri",
+length:"800 km",
+source:"Talakaveri, Karnataka",
+states:"Karnataka, Tamil Nadu",
+mouth:"Bay of Bengal",
+trib:"Kabini, Hemavati, Bhavani",
+about:"कावेरी दक्षिण भारत की महत्वपूर्ण नदी है और कर्नाटक तथा तमिलनाडु के लिए बेहद उपयोगी है।"
+},
+
+{
+name:"महानदी",
+eng:"Mahanadi",
+length:"858 km",
+source:"Chhattisgarh",
+states:"Chhattisgarh, Odisha",
+mouth:"Bay of Bengal",
+trib:"Seonath, Hasdeo, Mand",
+about:"महानदी छत्तीसगढ़ और ओडिशा की प्रमुख नदी है तथा बंगाल की खाड़ी में गिरती है।"
+}
+
+];
+
+
+const cards=document.getElementById("cards");
+const list=document.getElementById("list");
+
+
+function render(data){
+
+  cards.innerHTML="";
+  list.innerHTML="";
+
+  data.slice(0,6).forEach((r)=>{
+
+    let i=rivers.indexOf(r);
+
+    cards.innerHTML+=`
+      <div class="card" onclick="openDetail(${i})">
+        <div class="wave">🌊</div>
+        <span class="km">${r.length}</span>
+        <h3>${r.name}</h3>
+        <p>${r.eng}</p>
+      </div>
+    `;
+
+  });
+
+
+  data.forEach((r)=>{
+
+    let i=rivers.indexOf(r);
+
+    list.innerHTML+=`
+      <div class="item" onclick="openDetail(${i})">
+
+        <div class="icon">🌊</div>
+
+        <div class="item-info">
+          <h3>${r.name}</h3>
+          <p>${r.eng} • ${r.length}</p>
+        </div>
+
+        <div class="arrow">›</div>
+
+      </div>
+    `;
+
+  });
+
+}
+
+
+function searchRiver(){
+
+  let q=document
+    .getElementById("search")
+    .value
+    .toLowerCase()
+    .trim();
+
+  let result=rivers.filter(r=>
+    r.name.includes(q) ||
+    r.eng.toLowerCase().includes(q)
+  );
+
+  render(result);
+
+}
+
+
+function openDetail(i){
+
+  let r=rivers[i];
+
+  document.getElementById("dName").innerText=r.name;
+  document.getElementById("dEnglish").innerText=r.eng;
+
+  document.getElementById("dLength").innerText=r.length;
+  document.getElementById("dSource").innerText=r.source;
+  document.getElementById("dStates").innerText=r.states;
+  document.getElementById("dMouth").innerText=r.mouth;
+
+  document.getElementById("dAbout").innerText=r.about;
+  document.getElementById("dTrib").innerText=r.trib;
+
+  document.getElementById("detail").style.display="block";
+
+}
+
+
+function closeDetail(){
+  document.getElementById("detail").style.display="none";
+}
+
+
+function fav(btn){
+  btn.innerText=btn.innerText==="♡"?"♥":"♡";
+}
+
+
+let scale=1;
+
+function zoom(x){
+
+  scale+=x*.1;
+
+  if(scale<.8)scale=.8;
+  if(scale>1.4)scale=1.4;
+
+  document.querySelector(".india").style.transform=
+    `translate(-50%,-50%) perspective(500px) rotateX(48deg) rotateZ(-4deg) scale(${scale})`;
+}
+
+
+function resetMap(){
+
+  scale=1;
+
+  document.querySelector(".india").style.transform=
+    "translate(-50%,-50%) perspective(500px) rotateX(48deg) rotateZ(-4deg) scale(1)";
+
+}
+
+
+function mapScroll(){
+  document.querySelector(".map")
+  .scrollIntoView({behavior:"smooth"});
+}
+
+
+function riverScroll(){
+  document.querySelector(".list")
+  .scrollIntoView({behavior:"smooth"});
+}
+
+
+render(rivers);
+
+</script>
+
+</body>
+</html>
